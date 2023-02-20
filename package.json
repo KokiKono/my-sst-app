@@ -19,7 +19,8 @@
     "typescript": "^4.9.5"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "frontend"
   ],
   "dependencies": {
     "@sls-next/lambda-at-edge": "^3.7.0"
