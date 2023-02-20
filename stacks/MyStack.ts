@@ -1,4 +1,4 @@
-import { StackContext, Api } from "sst/constructs";
+import { StackContext, Api, Table } from "sst/constructs";
 
 export function API({ stack }: StackContext) {
   const api = new Api(stack, "api", {
@@ -8,5 +8,15 @@ export function API({ stack }: StackContext) {
   });
   stack.addOutputs({
     ApiEndpoint: api.url,
+  });
+}
+
+export function MyStack({ stack, app }: StackContext) {
+  // Create the table
+  const table = new Table(stack, "Counter", {
+    fields: {
+      counter: "string",
+    },
+    primaryIndex: { partitionKey: "counter" },
   });
 }
