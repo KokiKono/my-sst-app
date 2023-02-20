@@ -1,4 +1,4 @@
-import { StackContext, Api, Table } from "sst/constructs";
+import { StackContext, Api, Table, NextjsSite } from "sst/constructs";
 
 export function API({ stack }: StackContext) {
   const api = new Api(stack, "api", {
@@ -19,4 +19,23 @@ export function MyStack({ stack, app }: StackContext) {
     },
     primaryIndex: { partitionKey: "counter" },
   });
+
+  const site = new NextjsSite(stack, "Site", {
+    path: "frontend",
+    environment: {
+      // Pass the table details to our app
+      REGION: app.region,
+      TABLE_NAME: table.tableName,
+    },
+  });
+  
+  // Allow the Next.js API to access the table
+  site.attachPermissions([table]);
+  
+  // Show the site URL in the output
+  stack.addOutputs({
+    URL: site.url ?? 'test-koki',
+  });
+  
+  
 }
