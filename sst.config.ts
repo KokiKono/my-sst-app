@@ -5,9 +5,10 @@ export default {
   config(_input) {
     return {
       name: "my-sst-app",
-      region: "us-east-1",
+      region: "ap-northeast-1",
     };
   },
-  stacks(app) {    app.stack(API)
-},
+  stacks(app) {
+    app.stack(API);
+  },
 } satisfies SSTConfig;
