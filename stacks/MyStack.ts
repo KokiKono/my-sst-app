@@ -1,15 +1,4 @@
-import { StackContext, Api, Table, NextjsSite } from "sst/constructs";
-
-export function API({ stack }: StackContext) {
-  const api = new Api(stack, "api", {
-    routes: {
-      "GET /": "packages/functions/src/lambda.handler",
-    },
-  });
-  stack.addOutputs({
-    ApiEndpoint: api.url,
-  });
-}
+import { StackContext, Table, NextjsSite } from "sst/constructs";
 
 export function MyStack({ stack, app }: StackContext) {
   // Create the table
