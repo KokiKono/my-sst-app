@@ -15,7 +15,11 @@ export function MyStack({ stack, app }: StackContext) {
       // Pass the table details to our app
       REGION: app.region,
       TABLE_NAME: table.tableName,
+      NEXT_PUBLIC_APP_NAME: 'my-sst-app'
     },
+    dev: {
+      deploy: false
+    }
   });
   
   // Allow the Next.js API to access the table

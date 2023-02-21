@@ -20,7 +20,7 @@ export default function Home() {
         <div className={styles.description}>
           <p>
             Get started by editing&nbsp;
-            <code className={styles.code}>{`${process.env.NEXT_PUBLIC_APP_NAME}`}</code>
+            <code className={styles.code}>{`${process.env.NEXT_PUBLIC_APP_NAME}_${process.env.NEXT_PUBLIC_APP_ENV}`}</code>
           </p>
           <div>
             <a
