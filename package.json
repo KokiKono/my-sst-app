@@ -23,7 +23,7 @@
       "packages/*",
       "frontend"
     ],
-    "nohoist": ["**/@next/**"]
+    "nohoist": ["**/@next/**", "**/@swc/**"]
   },
   "dependencies": {
     "@sls-next/lambda-at-edge": "^3.7.0"

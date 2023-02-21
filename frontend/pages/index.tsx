@@ -28,7 +28,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              By{' '}
+              {process.env.NEXT_PUBLIC_APP_HOGE} By{' '}
               <Image
                 src="/vercel.svg"
                 alt="Vercel Logo"
