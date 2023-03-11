@@ -21,6 +21,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup release pr
+        id: setup
         run: |
           RELEASE_PR_BODY=$(cat << EOF
           # Release v${{steps.create-release.outputs.tag_name}}
@@ -38,13 +39,13 @@ jobs:
 
           echo "$RELEASE_PR_BODY" >> CHANGELOG.md
 
-          echo "RELEASE_PR_BODY<<EOF" >> $GITHUB_ENV
-          echo $RELEASE_PR_BODY >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          echo "RELEASE_PR_BODY<<EOF" >> $GITHUB_OUTPUT
+          echo $RELEASE_PR_BODY >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create draft release pr
         uses: peter-evans/create-pull-request@v4
         with:
           branch: "release/v${{steps.create-release.outputs.tag_name}}"
-          body: "$RELEASE_PR_BODY"
+          body: ${{ steps.setup.outputs.RELEASE_PR_BODY }}
           add-paths: ./CHANGELOG.md
