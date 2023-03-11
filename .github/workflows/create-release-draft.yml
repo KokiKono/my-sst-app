@@ -24,7 +24,7 @@ jobs:
         id: setup
         run: |
           RELEASE_PR_BODY=$(cat << EOF
-          # Release v${{steps.create-release.outputs.tag_name}}
+          # Release ${{steps.create-release.outputs.tag_name}}
 
           ## Changelog
 
@@ -39,9 +39,10 @@ jobs:
 
           echo "$RELEASE_PR_BODY" >> CHANGELOG.md
 
-          echo "RELEASE_PR_BODY<<EOF" >> $GITHUB_OUTPUT
+          delimiter="$(openssl rand -hex 8)"
+          echo "RELEASE_PR_BODY<<$delimiter" >> $GITHUB_OUTPUT
           echo $RELEASE_PR_BODY >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "$delimiter" >> $GITHUB_OUTPUT
 
       - name: Create draft release pr
         uses: peter-evans/create-pull-request@v4
