@@ -12,7 +12,6 @@ jobs:
       - name: Dump context
         uses: crazy-max/ghaction-dump-context@v2
       - name: Extract release ID
-        id: Confirm release
         uses: actions/github-script@v6
         with:
           script: |
