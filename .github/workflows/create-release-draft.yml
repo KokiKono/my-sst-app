@@ -26,8 +26,6 @@ jobs:
         with: 
           script: |
             const body = `
-            # Release ${{steps.create-release.outputs.tag_name}}
-            ## Changelog
             ${{steps.create-release.outputs.body}}
             ## Refs
             - [Draft Release PR](${{steps.create-release.outputs.html_url}})
