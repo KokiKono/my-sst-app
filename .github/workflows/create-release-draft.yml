@@ -22,28 +22,20 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup release pr
         id: setup
+        uses: actions/github-script@v6
+        with: 
+          script: |
+            const body = `
+            # Release ${{steps.create-release.outputs.tag_name}}
+            ## Changelog
+            ${{steps.create-release.outputs.body}}
+            ## Refs
+            - [Draft Release PR](${{steps.create-release.outputs.html_url}})
+            `
+            core.setOutput('RELEASE_PR_BODY', body)
+      - name: Append CHANGELOG file
         run: |
-          RELEASE_PR_BODY=$(cat << EOF
-          # Release ${{steps.create-release.outputs.tag_name}}
-
-          ## Changelog
-
-          ${{steps.create-release.outputs.body}}
-
-          ## Refs
-
-          - [Draft Release PR](${{steps.create-release.outputs.html_url}})
-
-          EOF
-          )
-
-          echo "$RELEASE_PR_BODY" >> CHANGELOG.md
-
-          delimiter="$(openssl rand -hex 8)"
-          echo "RELEASE_PR_BODY<<$delimiter" >> $GITHUB_OUTPUT
-          echo "${RELEASE_PR_BODY//$'\n'/\\n}" >> $GITHUB_OUTPUT
-          echo "$delimiter" >> $GITHUB_OUTPUT
-
+          echo ${{ steps.setup.outputs.RELEASE_PR_BODY }} >> CHANGE.md
       - name: Create draft release pr
         uses: peter-evans/create-pull-request@v4
         with:
