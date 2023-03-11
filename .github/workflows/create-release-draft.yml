@@ -38,6 +38,6 @@ jobs:
       - name: Create draft release pr
         uses: peter-evans/create-pull-request@v4
         with:
-          branch: "release/v${{steps.create-release.outputs.tag_name}}"
+          branch: "release/${{steps.create-release.outputs.tag_name}}"
           body: ${{ steps.setup.outputs.RELEASE_PR_BODY }}
           add-paths: ./CHANGELOG.md
