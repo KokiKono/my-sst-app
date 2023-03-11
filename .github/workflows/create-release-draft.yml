@@ -36,11 +36,11 @@ jobs:
           EOF
           )
 
+          echo "$RELEASE_PR_BODY" >> CHANGELOG.md
+
           echo "RELEASE_PR_BODY<<EOF" >> $GITHUB_ENV
           echo $RELEASE_PR_BODY >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-
-          echo $RELEASE_PR_BODY >> CHANGELOG.md
 
       - name: Create draft release pr
         uses: peter-evans/create-pull-request@v4
