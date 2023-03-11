@@ -29,7 +29,8 @@ jobs:
             ${{steps.create-release.outputs.body}}
             ## Refs
             - [Draft Release PR](${{steps.create-release.outputs.html_url}})
-            `;
+
+            <!-- draft_release_id=${{ steps.create-release.outputs.id }} -->`;
 
             core.setOutput('RELEASE_PR_BODY', body);
       - name: Append CHANGELOG file
