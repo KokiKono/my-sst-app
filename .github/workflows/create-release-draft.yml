@@ -19,15 +19,25 @@ jobs:
         id: create-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup release pr
+        run: |
+          RELEASE_PR_BODY=$(cat << EOF
+          # Release v${{steps.create-release.outputs.tag_name}}
+
+          ## Changelog
+
+          ${{steps.create-release.outputs.body}}
+
+          ## Refs
+
+          - [Draft Release PR](${{steps.create-release.outputs.html_url}})
+
+          EOF
+          )
+          echo "RELEASE_PR_BODY=${RELEASE_PR_BODY}" >> $GITHUB_ENV
       - name: Create draft release pr
         uses: peter-evans/create-pull-request@v4
         with:
           branch: "release/v${{steps.create-release.outputs.tag_name}}"
-          body: |
-            |
-            # Release v${{steps.create-release.outputs.tag_name}}
-            ## Changelog
-            ${{steps.create-release.outputs.body}}
-            ## Refs
-            - [Draft Release PR](${{steps.create-release.outputs.html_url}})
+          body: $RELEASE_PR_BODY
 
