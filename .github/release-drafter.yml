@@ -20,6 +20,8 @@ categories:
     label: 'type: dependencies'
     collapse-after: 5
 
+change-template: '- $TITLE (#$NUMBER)'
+
 version-resolver:
   major:
     labels:
