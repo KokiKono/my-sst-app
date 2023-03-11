@@ -41,7 +41,7 @@ jobs:
 
           delimiter="$(openssl rand -hex 8)"
           echo "RELEASE_PR_BODY<<$delimiter" >> $GITHUB_OUTPUT
-          echo $RELEASE_PR_BODY >> $GITHUB_OUTPUT
+          echo "${RELEASE_PR_BODY//$'\n'/\\n}" >> $GITHUB_OUTPUT
           echo "$delimiter" >> $GITHUB_OUTPUT
 
       - name: Create draft release pr
