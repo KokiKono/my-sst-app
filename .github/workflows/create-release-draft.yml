@@ -1,0 +1,35 @@
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+
+jobs:
+  update_release_draft:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@v5
+        id: create-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create draft release pr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          branch: "release/v${{steps.create-release.outputs.tag_name}}"
+          body: |
+            |
+            # Release v${{steps.create-release.outputs.tag_name}}
+            ## Changelog
+            ${{steps.create-release.outputs.body}}
+            ## Refs
+            - [Draft Release PR](${{steps.create-release.outputs.html_url}})
+
