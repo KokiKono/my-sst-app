@@ -19,6 +19,7 @@ jobs:
             const match = body.match(/<!-- draft_release_id=(?<releaseId>.+) -->/);
             const releaseId = match.groups?.releaseId;
             if (!releaseId) {
+                core.debug(${{github.event}})
                 core.setFailed(`リリースIDを取得できませんでした`);
             }
 
