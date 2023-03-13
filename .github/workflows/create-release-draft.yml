@@ -36,22 +36,48 @@ jobs:
       - name: Append CHANGELOG file
         run: |
           echo "${{ steps.setup.outputs.RELEASE_PR_BODY }}" >> CHANGELOG.md
+
+          git config --local user.email "release-pr-bot@progrit.co.jp"
+          git config --local user.name "release-pr-bot"
+          git checkout -b release/next
+
+          git add CHANGELOG.md
+          git commit -m 'chore: Generate CHANGELOG.md'
+
+          git push -f -u origin release/next
+
       - name: Create release pr for main
-        uses: peter-evans/create-pull-request@v4
-        id: create-release-pr-for-main
-        with:
-          branch: "release/next"
-          title: "Release ${{steps.create-release.outputs.tag_name}}"
-          body: ${{ steps.setup.outputs.RELEASE_PR_BODY }}
-          add-paths: ./CHANGELOG.md
-        # CHANGELOGをdevelop反映するPRはリリースPRマージ後にPR作成し、auto-mergeさせる
-      - name: Turn main branch for release pr
         uses: actions/github-script@v6
+        env:
+          RELEASE_ID: ${{steps.create-release.outputs.tag_name}}
+          BRANCH: release/next
+          BODY: ${{ steps.setup.outputs.RELEASE_PR_BODY }}
         with:
           script: |
-            github.rest.pulls.update({
+            const { data: existReleasePrs } = await github.rest.pulls({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: ${{ steps.create-release-pr-for-main.outputs.pull-request-number }},
+              head: `${process.env.BRANCH}`,
               base: 'main'
-            })
+            });
+
+            if ( existReleasePrs.length === 0 ) {
+              await github.rest.pulls.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `Release ${process.env.RELEASE_ID}`,
+                body: `${process.env.BODY}`,
+                head: `${process.env.BRANCH}`,
+                base: 'main',
+                maintainer_can_modify: true,
+                draft: true
+              })
+            } else {
+              await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `Release ${process.env.RELEASE_ID}`,
+                body: `${process.env.BODY}`,
+              })
+            }
+        # CHANGELOGをdevelop反映するPRはリリースPRマージ後にPR作成し、auto-mergeさせる
