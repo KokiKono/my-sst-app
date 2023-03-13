@@ -17,14 +17,12 @@ jobs:
         with:
           script: |
             const owner = "${{ github.repository_owner	 }}";
-            const repo = "${{ github.repository }}".split('/')[1]
+            const repo = "${{ github.repository }}".split('/')[1];
             const prs = await github.rest.repos.listPullRequestsAssociatedWithCommit({
               owner,
               repo,
               commit_sha: "${{ github.sha }}",
             });
-
-            console.log(JSON.stringify(prs));
             
             if (prs == null || prs.length === 0) {
               core.setFailed(`マージPRを取得できませんでした`);
@@ -59,10 +57,10 @@ jobs:
               make_latest: 'true'
             });
 
-            const changeLog = updatedRelease.body.replace('# What's Changed', `Release ${updatedRelease.name}`);
+            const changeLog = updatedRelease.body.replace("# What's Changed", `Release ${updatedRelease.name}`);
 
-            core.setOutput('changelog', changeLog)
-            core.setOutput('version', updatedRelease.name)
+            core.setOutput('changelog', changeLog);
+            core.setOutput('version', updatedRelease.name);
       - name: Make changelog file
         run: |
           echo "${{ steps.confirm-release.outputs.changelog }}" >> CHANGELOG.md
