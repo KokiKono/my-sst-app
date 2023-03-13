@@ -76,6 +76,7 @@ jobs:
               await github.rest.pulls.update({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
+                pull_number: existReleasePrs[0].number
                 title: `Release ${process.env.RELEASE_ID}`,
                 body: `${process.env.BODY}`,
               })
