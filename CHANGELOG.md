@@ -12,5 +12,6 @@
 **Full Changelog**: https://github.com/KokiKono/my-sst-app/compare/...v0.1.0
 
 ## Refs
-- [Draft Release PR](https://github.com/KokiKono/my-sst-app/releases/tag/untagged-91dcaf9c09e30ffd9f20)
+- [Draft Release PR](https://github.com/KokiKono/my-sst-app/releases/tag/untagged-e65f0a816da3e5b377b0)
 
+<!-- draft_release_id=95277543 -->
