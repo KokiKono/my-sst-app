@@ -61,7 +61,6 @@
 
 ## Other changes
 
-- fix: mainブランチに反映されない問題 (#21)
 - chore: Create (#19)
 - chore: Create (#15)
 - Release v0.2.0 (#12)
