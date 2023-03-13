@@ -54,7 +54,7 @@ jobs:
               title: "Release ${{steps.create-release.outputs.tag_name}}",
               body: "${{ steps.setup.outputs.RELEASE_PR_BODY }}"
               head: `${process.env.BRANCH}`,
-              base: 'master',
+              base: 'main',
               maintainer_can_modify: true,
               draft: false
             })
