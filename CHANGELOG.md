@@ -51,6 +51,10 @@
 
 - feat: Create (#10)
 
+## Bug Fixes
+
+- fix (#17)
+
 ## Documentation
 
 - chore: Create (#9)
@@ -63,6 +67,6 @@
 **Full Changelog**: https://github.com/KokiKono/my-sst-app/compare/v0.1.0...v0.2.0
 
 ## Refs
-- [Draft Release PR](https://github.com/KokiKono/my-sst-app/releases/tag/untagged-00ae73e1f15c7763afe2)
+- [Draft Release PR](https://github.com/KokiKono/my-sst-app/releases/tag/untagged-6ed0d0aeb4e4aee341d4)
 
 <!-- draft_release_id=95334488 -->
