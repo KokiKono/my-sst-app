@@ -43,7 +43,6 @@ jobs:
             const match = body.match(/<!-- draft_release_id=(?<releaseId>.+) -->/);
             const releaseId = match?.groups?.releaseId;
             if (!releaseId) {
-                core.info('${{ toJSON(github) }}');
                 core.setFailed(`リリースIDを取得できませんでした`);
                 return;
             }
