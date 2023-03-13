@@ -42,7 +42,15 @@ jobs:
         with:
           branch: "release/next"
           title: "Release ${{steps.create-release.outputs.tag_name}}"
-          base: 'main'
           body: ${{ steps.setup.outputs.RELEASE_PR_BODY }}
           add-paths: ./CHANGELOG.md
         # CHANGELOGをdevelop反映するPRはリリースPRマージ後にPR作成し、auto-mergeさせる
+      - name: Turn main branch for release pr
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: ${{ steps.create-release-pr-for-main.outputs.pull-request-number }}
+            })
