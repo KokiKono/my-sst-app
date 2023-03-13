@@ -3,7 +3,7 @@ name: Release Drafter
 on:
   push:
     branches:
-      - main
+      - develop
 
 permissions:
   contents: read
@@ -29,7 +29,8 @@ jobs:
             ${{steps.create-release.outputs.body}}
             ## Refs
             - [Draft Release PR](${{steps.create-release.outputs.html_url}})
-            `;
+
+            <!-- draft_release_id=${{ steps.create-release.outputs.id }} -->`;
 
             core.setOutput('RELEASE_PR_BODY', body);
       - name: Append CHANGELOG file
@@ -39,5 +40,6 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           branch: "release/${{steps.create-release.outputs.tag_name}}"
+          title: "Release ${{steps.create-release.outputs.tag_name}}"
           body: ${{ steps.setup.outputs.RELEASE_PR_BODY }}
           add-paths: ./CHANGELOG.md
