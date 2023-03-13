@@ -15,7 +15,31 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const body = '${{ github.event.body }}'
+            const owner = "${{ github.repository_owner	 }}";
+            const repo = "${{ github.repository }}".split('/')[1]
+            const prs = await octokit.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner,
+              repo,
+              commit_sha: "${{ github.event.sha }}",
+            });
+            
+            if (prs == null || prs.length === 0) {
+              core.setFailed(`マージPRを取得できませんでした`);
+              return;
+            }
+
+            const releasePr = await octokit.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: prs[0].number,
+            });
+
+            if (releasePr == null) {
+              core.setFailed(`リリースPRを取得できませんでした`);
+              return;
+            }
+
+            const body = releasePr.body;
             const match = body.match(/<!-- draft_release_id=(?<releaseId>.+) -->/);
             const releaseId = match?.groups?.releaseId;
             if (!releaseId) {
@@ -26,9 +50,9 @@ jobs:
 
             core.debug(`releaseId: ${releaseId}`);
             
-            octokit.rest.repos.updateRelease({
-              owner: "${{ github.repository_owner	 }}",
-              repo: "${{ github.repository }}".split('/')[1],
+            await octokit.rest.repos.updateRelease({
+              owner,
+              repo,
               release_id: Number(releaseId),
               make_latest: 'true'
             });
