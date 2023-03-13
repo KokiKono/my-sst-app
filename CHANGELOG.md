@@ -159,3 +159,34 @@
 - [Draft Release PR](https://github.com/KokiKono/my-sst-app/releases/tag/untagged-401255a26671680d7ced)
 
 <!-- draft_release_id=95334488 -->
+
+# What's Changed
+## New
+
+- feat: Create (#10)
+
+## Bug Fixes
+
+- fix (#17)
+
+## Documentation
+
+- chore: Create (#9)
+
+## Other changes
+
+- fix (#25)
+- fix: syntax error (#24)
+- fix: branch (#23)
+- fix: syntax error (#22)
+- fix: mainブランチに反映されない問題 (#21)
+- chore: Create (#19)
+- chore: Create (#15)
+- Release v0.2.0 (#12)
+- Release v0.1.1 (#11)
+**Full Changelog**: https://github.com/KokiKono/my-sst-app/compare/v0.1.0...v0.2.0
+
+## Refs
+- [Draft Release PR](https://github.com/KokiKono/my-sst-app/releases/tag/untagged-a190255e156a91b3b95c)
+
+<!-- draft_release_id=95334488 -->
