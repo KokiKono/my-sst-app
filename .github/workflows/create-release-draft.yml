@@ -40,5 +40,6 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           branch: "release/${{steps.create-release.outputs.tag_name}}"
+          title: "Release ${{steps.create-release.outputs.tag_name}}"
           body: ${{ steps.setup.outputs.RELEASE_PR_BODY }}
           add-paths: ./CHANGELOG.md
