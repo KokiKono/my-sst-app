@@ -46,13 +46,14 @@ jobs:
         uses: actions/github-script@v6
         env:
           BRANCH: "release/next"
+          BODY: ${{ steps.setup.outputs.RELEASE_PR_BODY }}
         with:
           script: |
             const { data: releasePrResult } = await github.rest.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: "Release ${{steps.create-release.outputs.tag_name}}",
-              body: "${{ steps.setup.outputs.RELEASE_PR_BODY }}"
+              body: `${process.env.BODY}`,
               head: `${process.env.BRANCH}`,
               base: 'main',
               maintainer_can_modify: true,
