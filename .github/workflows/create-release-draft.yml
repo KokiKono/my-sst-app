@@ -46,10 +46,19 @@ jobs:
           body: ${{ steps.setup.outputs.RELEASE_PR_BODY }}
           add-paths: ./CHANGELOG.md
       - name: Create release pr for develop
-        uses: peter-evans/create-pull-request@v4
+        uses: actions/github-script@v6
+        env:
+          BRANCH: "release/next"
+          BODY: "${{ steps.create-release-pr-for-main.outputs.pull-request-url}} のDevelopマージ用PRです"
         with:
-          branch: "release/next"
-          title: "Release ${{steps.create-release.outputs.tag_name}}"
-          base: 'develop'
-          body: "${{ steps.create-release-pr-for-main.outputs.pull-request-url }}のDevelopマージ用PRです"
-          add-paths: ./CHANGELOG.md
+          script: |
+            const { data: patchPrResult } = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Release Patch for develop`,
+              body: `${process.env.BODY},
+              head: `${process.env.BRANCH}`,
+              base: 'develop',
+              maintainer_can_modify: true,
+              draft: true
+            })
