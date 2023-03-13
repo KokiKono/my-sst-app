@@ -42,31 +42,20 @@ jobs:
           author_name: "release-pr-bot"
           author_email: "release-pr-bot@progrit.co.jp"
           message: "Generate changelog for ${{ steps.create-release.outputs.tag_name }}"
-      - name: Create PR
-        uses: actions/github-script@v6
-        env:
-          BRANCH: "release/next"
-          BODY: ${{ steps.setup.outputs.RELEASE_PR_BODY }}
+      - name: Create release pr for main
+        uses: peter-evans/create-pull-request@v4
+        id: create-release-pr-for-main
         with:
-          script: |
-            const { data: releasePrResult } = await github.rest.pulls.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: "Release ${{steps.create-release.outputs.tag_name}}",
-              body: `${process.env.BODY}`,
-              head: `${process.env.BRANCH}`,
-              base: 'main',
-              maintainer_can_modify: true,
-              draft: false
-            })
-            const { data: patchPrResult } = await github.rest.pulls.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: "Release Patch ${{steps.create-release.outputs.tag_name}}",
-              body: `${releasePrResult.html_url} のDevelopマージ用PRです`,
-              head: `${process.env.BRANCH}`,
-              base: 'develop',
-              maintainer_can_modify: true,
-              draft: false
-            })
-
+          branch: "release/next"
+          title: "Release ${{steps.create-release.outputs.tag_name}}"
+          base: 'main'
+          body: ${{ steps.setup.outputs.RELEASE_PR_BODY }}
+          add-paths: ./CHANGELOG.md
+      - name: Create release pr for develop
+        uses: peter-evans/create-pull-request@v4
+        with:
+          branch: "release/next"
+          title: "Release ${{steps.create-release.outputs.tag_name}}"
+          base: 'develop'
+          body: "${{ steps.create-release-pr-for-main.outputs.pull-request-url }}のDevelopマージ用PRです"
+          add-paths: ./CHANGELOG.md
