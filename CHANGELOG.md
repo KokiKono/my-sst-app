@@ -61,12 +61,13 @@
 
 ## Other changes
 
+- chore: Create (#19)
 - chore: Create (#15)
 - Release v0.2.0 (#12)
 - Release v0.1.1 (#11)
 **Full Changelog**: https://github.com/KokiKono/my-sst-app/compare/v0.1.0...v0.2.0
 
 ## Refs
-- [Draft Release PR](https://github.com/KokiKono/my-sst-app/releases/tag/untagged-6ed0d0aeb4e4aee341d4)
+- [Draft Release PR](https://github.com/KokiKono/my-sst-app/releases/tag/untagged-493ee281a91539cefdeb)
 
 <!-- draft_release_id=95334488 -->
