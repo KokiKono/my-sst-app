@@ -52,5 +52,6 @@ jobs:
             github.rest.pulls.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: ${{ steps.create-release-pr-for-main.outputs.pull-request-number }}
+              pull_number: ${{ steps.create-release-pr-for-main.outputs.pull-request-number }},
+              base: 'main'
             })
