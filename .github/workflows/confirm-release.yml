@@ -53,8 +53,7 @@ jobs:
             const {data: updatedRelease} = await github.rest.repos.updateRelease({
               owner,
               repo,
-              release_id: Number(releaseId),
-              make_latest: 'true'
+              release_id: Number(releaseId)
             });
 
             const changeLog = updatedRelease.body.replace("# What's Changed", `Release ${updatedRelease.name}`);
