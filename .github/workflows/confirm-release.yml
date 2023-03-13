@@ -21,6 +21,7 @@ jobs:
             if (!releaseId) {
                 core.info('${{ toJSON(github) }}');
                 core.setFailed(`リリースIDを取得できませんでした`);
+                return;
             }
 
             core.debug(`releaseId: ${releaseId}`);
