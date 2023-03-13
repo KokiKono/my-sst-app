@@ -36,12 +36,6 @@ jobs:
       - name: Append CHANGELOG file
         run: |
           echo "${{ steps.setup.outputs.RELEASE_PR_BODY }}" >> CHANGELOG.md
-      - uses: EndBug/add-and-commit@v9
-        with:
-          add: ./CHANGELOG.md
-          author_name: "release-pr-bot"
-          author_email: "release-pr-bot@progrit.co.jp"
-          message: "Generate changelog for ${{ steps.create-release.outputs.tag_name }}"
       - name: Create release pr for main
         uses: peter-evans/create-pull-request@v4
         id: create-release-pr-for-main
