@@ -38,7 +38,7 @@ jobs:
         uses: actions/github-script@v6
         env:
           RELEASE_ID: ${{steps.create-release.outputs.tag_name}}
-          BRANCH: release/next
+          BRANCH: develop
           BODY: ${{ steps.setup.outputs.RELEASE_PR_BODY }}
         with:
           script: |
