@@ -11,8 +11,9 @@ jobs:
     steps:
       - name: Dump context
         uses: crazy-max/ghaction-dump-context@v2
-      - name: Extract release ID
+      - name: Confirm release
         uses: actions/github-script@v6
+        id: confirm-release
         with:
           script: |
             const owner = "${{ github.repository_owner	 }}";
@@ -41,6 +42,8 @@ jobs:
               return;
             }
 
+            core.setOutput('releasePrLink', releasePr.html_url);
+
             const body = releasePr.body;
             const match = body.match(/<!-- draft_release_id=(?<releaseId>.+) -->/);
             const releaseId = match?.groups?.releaseId;
@@ -48,14 +51,34 @@ jobs:
                 core.setFailed(`リリースIDを取得できませんでした`);
                 return;
             }
-
-            core.debug(`releaseId: ${releaseId}`);
             
-            await github.rest.repos.updateRelease({
+            const {data: updatedRelease} = await github.rest.repos.updateRelease({
               owner,
               repo,
               release_id: Number(releaseId),
               make_latest: 'true'
             });
+
+            const changeLog = updatedRelease.body.replace('# What's Changed', `Release ${updatedRelease.name}`);
+
+            core.setOutput('changelog', changeLog)
+            core.setOutput('version', updatedRelease.name)
+      - name: Make changelog file
+        run: |
+          echo "${{ steps.confirm-release.outputs.changelog }}" >> CHANGELOG.md
+      - name: Create pr for attach changelog
+        uses: peter-evans/create-pull-request@v4
+        id: changelog-pr
+        with:
+          commit-message: Update Changelog
+          branch: update-changelog
+          delete-branch: true
+          title: 'Update changelog for ${{ steps.confirm-release.outputs.version }}'
+          body: "#概要\n${{ steps.confirm-release.outputs.releasePrLink }} のCHANGELOG反映PRです。"
+      - uses: peter-evans/enable-pull-request-automerge@v2
+        with:
+          pull-request-number: ${{ steps.changelog-pr.outputs.pull-request-number }}
+
+            
 
 
