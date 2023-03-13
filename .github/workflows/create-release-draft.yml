@@ -33,18 +33,6 @@ jobs:
             <!-- draft_release_id=${{ steps.create-release.outputs.id }} -->`;
 
             core.setOutput('RELEASE_PR_BODY', body);
-      - name: Append CHANGELOG file
-        run: |
-          echo "${{ steps.setup.outputs.RELEASE_PR_BODY }}" >> CHANGELOG.md
-
-          git config --local user.email "release-pr-bot@progrit.co.jp"
-          git config --local user.name "release-pr-bot"
-          git checkout -b release/next
-
-          git add CHANGELOG.md
-          git commit -m 'chore: Generate CHANGELOG.md'
-
-          git push -f -u origin release/next
 
       - name: Create release pr for main
         uses: actions/github-script@v6
