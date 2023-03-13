@@ -54,7 +54,7 @@ jobs:
           BODY: ${{ steps.setup.outputs.RELEASE_PR_BODY }}
         with:
           script: |
-            const { data: existReleasePrs } = await github.rest.pulls({
+            const { data: existReleasePrs } = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               head: `${process.env.BRANCH}`,
