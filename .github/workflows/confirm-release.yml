@@ -23,7 +23,7 @@ jobs:
               commit_sha: "${{ github.sha }}",
             });
 
-            console.log(prs);
+            console.log(JSON.stringify(prs));
             
             if (prs == null || prs.length === 0) {
               core.setFailed(`マージPRを取得できませんでした`);
