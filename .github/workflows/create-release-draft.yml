@@ -72,7 +72,7 @@ jobs:
             - [Draft Release PR](${{steps.create-release.outputs.html_url}})
 
             <!-- draft_release_id=${{ steps.create-release.outputs.id }} -->`
-            .replace('CLOSED_ISSUES', "${{ steps.getIssues.outputs.closedIssues }}");
+            .replace('CLOSED_ISSUES', `${{ steps.getIssues.outputs.closedIssues }}`);
 
             core.setOutput('RELEASE_PR_BODY', body);
       - name: Rebase release branch
