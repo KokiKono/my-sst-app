@@ -52,7 +52,7 @@ jobs:
               per_page: 100
             });
 
-            const issueBody = closedIssues.map((item) => `#${item.number} ${item.title}`).join('\n');
+            const issueBody = closedIssues.filter((item) => item.pull_request == null).map((item) => `#${item.number} ${item.title}`).join('\n');
 
             core.setOutput('closedIssues', issueBody);
 
