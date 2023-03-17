@@ -54,7 +54,7 @@ jobs:
 
             const issueBody = closedIssues.map((item) => `# ${item.number} ${item.title}`).join('\n');
 
-            const fs = require('node:fs/promises');
+            const fs = require('fs');
             const template = fs.readFileSync('./github/release-drafter.template.yml');
             const latest = template.replace('CLOSED_ISSUES', issueBody);
             fs.writeFileSync('./github/release-drafter.yml', latest);
