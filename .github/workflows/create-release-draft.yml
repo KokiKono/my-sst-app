@@ -54,10 +54,7 @@ jobs:
 
             const issueBody = closedIssues.map((item) => `# ${item.number} ${item.title}`).join('\n');
 
-            const fs = require('fs');
-            const template = fs.readFileSync('.github/release-drafter.template.yml', 'utf8');
-            const latest = template.replace('CLOSED_ISSUES', issueBody);
-            fs.writeFileSync('.github/release-drafter.yml', latest);
+            core.setOutput('closedIssues', issueBody);
 
       - uses: release-drafter/release-drafter@v5
         id: create-release
@@ -74,7 +71,8 @@ jobs:
             ## Refs
             - [Draft Release PR](${{steps.create-release.outputs.html_url}})
 
-            <!-- draft_release_id=${{ steps.create-release.outputs.id }} -->`;
+            <!-- draft_release_id=${{ steps.create-release.outputs.id }} -->`
+            .replace('CLOSED_ISSUES', "${{ steps.getIssues.outputs.closedIssues }}");
 
             core.setOutput('RELEASE_PR_BODY', body);
       - name: Rebase release branch
