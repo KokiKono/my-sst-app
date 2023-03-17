@@ -16,10 +16,51 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Get closed issues
+        id: getIssues
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const owner = "${{ github.repository_owner	 }}";
+            const repo = "${{ github.repository }}".split('/')[1];
+            const { data: sinceRef } = await github.rest.git.getTree({
+              owner,
+              repo,
+              tree_sha: 'main'
+            });
+            const { data: sinceCommit } = await github.rest.git.getCommit({
+              owner,
+              repo,
+              commit_sha: sinceRef.sha
+            });
+            const { data: latestRef } = await github.rest.git.getTree({
+              owner,
+              repo,
+              tree_sha: '${{ github.sha }}'
+            });
+            const { data: latestCommit } = await github.rest.git.getCommit({
+              owner,
+              repo,
+              commit_sha: latestRef.sha
+            });
+
+            const {data: closedIssues } = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: 'closed',
+              since: sinceCommit.author.date,
+              per_page: 100
+            });
+
+            const issueBody = closedIssues.filter((item) => item.pull_request == null).map((item) => `#${item.number} ${item.title}`).join('\n');
+
+            core.setOutput('closedIssues', issueBody);
+
       - uses: release-drafter/release-drafter@v5
         id: create-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Setup release pr
         id: setup
         uses: actions/github-script@v6
@@ -30,7 +71,8 @@ jobs:
             ## Refs
             - [Draft Release PR](${{steps.create-release.outputs.html_url}})
 
-            <!-- draft_release_id=${{ steps.create-release.outputs.id }} -->`;
+            <!-- draft_release_id=${{ steps.create-release.outputs.id }} -->`
+            .replace('CLOSED_ISSUES', `${{ steps.getIssues.outputs.closedIssues }}`);
 
             core.setOutput('RELEASE_PR_BODY', body);
       - name: Rebase release branch
@@ -72,3 +114,4 @@ jobs:
               })
             }
         # CHANGELOGをdevelop反映するPRはリリースPRマージ後にPR作成し、auto-mergeさせる
+ 
