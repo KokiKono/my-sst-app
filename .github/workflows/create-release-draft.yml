@@ -44,8 +44,6 @@ jobs:
               commit_sha: latestRef.sha
             });
 
-            console.log({sinceCommit, latestCommit})
-
             const {data: closedIssues } = await github.rest.issues.listForRepo({
               owner,
               repo,
@@ -54,15 +52,17 @@ jobs:
               per_page: 100
             });
 
-            console.log(closedIssues)
-
             core.setOutput('closedIssues', closedIssues.map((item) => `# ${item.number} ${item.title}`).join('\n'))
+
+      - run: |
+          tmp=$(cat ./github/release-drafter.yml)
+          replaced="${tmp//$'CLOSED_ISSUES'/${{ steps.getIssues.outputs.closedIssues }}}"
+          echo $replaced > ./github/release-drafter.yml
 
       - uses: release-drafter/release-drafter@v5
         id: create-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CLOSED_ISSUES: ${{ steps.getIssues.outputs.closedIssues }}
 
       - name: Setup release pr
         id: setup

@@ -5,7 +5,7 @@ template: |
 
   ## Closed Issues 🎉
 
-  $CLOSED_ISSUES
+  CLOSED_ISSUES
 
   ## PRs 🚀
 
