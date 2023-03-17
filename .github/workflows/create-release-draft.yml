@@ -63,21 +63,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CLOSED_ISSUES: ${{ steps.getIssues.outputs.closedIssues }}
-        with:
-          template: |
-            # Change
-
-            ## Closed Issues 🎉
-
-            $CLOSED_ISSUES
-
-            ## PRs 🚀
-
-            $CHANGES
-
-            ## Thanks Contributors 👏
-
-            $CONTRIBUTORS
 
       - name: Setup release pr
         id: setup

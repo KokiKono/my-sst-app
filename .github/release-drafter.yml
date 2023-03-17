@@ -1,8 +1,20 @@
 name-template: 'v$RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
 template: |
-  # What's Changed
+  # Change
+
+  ## Closed Issues 🎉
+
+  $CLOSED_ISSUES
+
+  ## PRs 🚀
+
   $CHANGES
+
+  ## Thanks Contributors 👏
+
+  $CONTRIBUTORS
+
   **Full Changelog**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
 categories:
   - title: 'Breaking'
