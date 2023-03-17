@@ -16,10 +16,59 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Get closed issues
+        id: getIssues
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const owner = "${{ github.repository_owner	 }}";
+            const repo = "${{ github.repository }}".split('/')[1];
+            const { data: sinceCommit } = await github.rest.git.getCommit({
+              owner,
+              repo,
+              commit_sha: 'main'
+            });
+            const { data: latestCommit } = await github.rest.git.getCommit({
+              owner,
+              repo,
+              commit_sha: '${{ github.sha }}'
+            });
+
+            console.log({sinceCommit, latestCommit})
+
+            const {data: closedIssues } = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: 'closed',
+              since: sinceCommit.author.date,
+              per_page: 100
+            });
+
+            console.log(closedIssues)
+
+            core.setOutput('closedIssues', closedIssues.map((item) => `# ${item.number} ${item.title}`).join('\n'))
+
       - uses: release-drafter/release-drafter@v5
         id: create-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLOSED_ISSUES: ${{ steps.getIssues.outputs.closedIssues }}
+        with:
+          template: |
+            # Change
+
+            ## Closed Issues 🎉
+
+            $CLOSED_ISSUES
+
+            ## PRs 🚀
+
+            $CHANGES
+
+            ## Thanks Contributors 👏
+
+            $CONTRIBUTORS
+
       - name: Setup release pr
         id: setup
         uses: actions/github-script@v6
