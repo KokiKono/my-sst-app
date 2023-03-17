@@ -23,15 +23,25 @@ jobs:
           script: |
             const owner = "${{ github.repository_owner	 }}";
             const repo = "${{ github.repository }}".split('/')[1];
+            const { data: sinceRef } = await github.rest.git.getRef({
+              owner,
+              repo,
+              ref: 'main'
+            });
             const { data: sinceCommit } = await github.rest.git.getCommit({
               owner,
               repo,
-              commit_sha: 'main'
+              commit_sha: sinceRef.object.sha
+            });
+            const { data: latestRef } = await github.rest.git.getRef({
+              owner,
+              repo,
+              ref: '${{ github.sha }}'
             });
             const { data: latestCommit } = await github.rest.git.getCommit({
               owner,
               repo,
-              commit_sha: '${{ github.sha }}'
+              commit_sha: latestRef.object.sha
             });
 
             console.log({sinceCommit, latestCommit})
@@ -121,3 +131,4 @@ jobs:
               })
             }
         # CHANGELOGをdevelop反映するPRはリリースPRマージ後にPR作成し、auto-mergeさせる
+ 
