@@ -31,7 +31,7 @@ jobs:
             const { data: sinceCommit } = await github.rest.git.getCommit({
               owner,
               repo,
-              commit_sha: sinceRef.object.sha
+              commit_sha: sinceRef.sha
             });
             const { data: latestRef } = await github.rest.git.getTree({
               owner,
@@ -41,7 +41,7 @@ jobs:
             const { data: latestCommit } = await github.rest.git.getCommit({
               owner,
               repo,
-              commit_sha: latestRef.object.sha
+              commit_sha: latestRef.sha
             });
 
             console.log({sinceCommit, latestCommit})
