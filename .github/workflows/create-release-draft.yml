@@ -114,7 +114,4 @@ jobs:
               })
             }
         # CHANGELOGをdevelop反映するPRはリリースPRマージ後にPR作成し、auto-mergeさせる
-      - name: Debug
-        if: ${{ always() }}
-        uses: mxschmitt/action-tmate@v3
  
