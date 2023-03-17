@@ -55,9 +55,11 @@ jobs:
             core.setOutput('closedIssues', closedIssues.map((item) => `# ${item.number} ${item.title}`).join('\n'))
 
       - run: |
-          tmp=$(cat ./github/release-drafter.yml)
-          replaced="${tmp//$'CLOSED_ISSUES'/${{ steps.getIssues.outputs.closedIssues }}}"
-          echo $replaced > ./github/release-drafter.yml
+          tmp=$(cat .github/release-drafter.yml)
+          replaced="${tmp//$'CLOSED_ISSUES'/$CLOSED_ISSUES"
+          echo $replaced > .github/release-drafter.yml
+        env:
+          CLOSED_ISSUES: ${{ steps.getIssues.outputs.closedIssues }}}
 
       - uses: release-drafter/release-drafter@v5
         id: create-release
